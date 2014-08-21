@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Users(models.Model):
-	RFID=models.IntegerField()
+	RFID=models.CharField(max_length=50)
 	password=models.CharField(max_length=50)
 	firstName=models.CharField(max_length=50)
 	lastName=models.CharField(max_length=50)
