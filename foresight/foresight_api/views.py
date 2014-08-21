@@ -21,7 +21,7 @@ class Get_Scanned(APIView):
     def get(self, request, *args, **kw):
        # arg1 = request.GET.get('employee_id',None)
         #response = serializers.serialize("json",Response(Recently_Scanned.objects.order_by('-timestamp')[:5]), status=status.HTTP_200_OK))
-        result = serializers.serialize("json", Recently_Scanned.objects.order_by('-timestamp')[:5])
+        result = serializers.serialize("json", Recently_Scanned.objects.order_by('-timestamp')[:10])
         response = Response(result, status=status.HTTP_200_OK)        
         return response
 
