@@ -19,7 +19,7 @@ class Room_Data_Serializer(serializers.HyperlinkedModelSerializer):
 class Customer_History_Serializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Customer_History
-		fields = ('hotel','roomNum','daysStayed','timestamp','counter')
+		fields = ('hotel','roomNum','daysStayed','timestamp','counter','user_id')
 
 class Recently_Scanned_Serializer(serializers.HyperlinkedModelSerializer):
 	class Meta:

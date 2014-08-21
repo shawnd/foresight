@@ -46,7 +46,7 @@ class Customer_History_ViewSet(viewsets.ModelViewSet):
 	queryset = Customer_History.objects.all()
 	serializer_class = Customer_History_Serializer
 	filter_backends = (filters.DjangoFilterBackend,)
-	filter_fields = ['hotel','roomNum']
+	filter_fields = ['hotel','roomNum','user_id']
 
 class Recently_Scanned_ViewSet(viewsets.ModelViewSet):
 	queryset = Recently_Scanned.objects.all()

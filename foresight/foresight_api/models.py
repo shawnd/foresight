@@ -27,6 +27,7 @@ class Room_Data(models.Model):
     hotel=models.CharField(max_length=50)
 
 class Customer_History(models.Model):
+	user_id=models.CharField(max_length=50)
 	hotel=models.CharField(max_length=50)
 	roomNum=models.CharField(max_length=50)
 	daysStayed=models.CharField(max_length=50)
