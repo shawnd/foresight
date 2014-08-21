@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url, include
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 from foresight_api import views
-from views import Users_ViewSet,Contact_Info_ViewSet,Room_Data_ViewSet,Customer_History_ViewSet,Recently_Scanned_ViewSet,Get_Scanned,User_Avg_ViewSet,Add_Temp,Avg_Temp
+from views import Users_ViewSet,Contact_Info_ViewSet,Room_Data_ViewSet,Customer_History_ViewSet,Recently_Scanned_ViewSet,Get_Scanned,User_Avg_ViewSet,Add_Temp,Avg_Temp,Latest_RD
 
 router = routers.DefaultRouter()
 router.register(r'Users', views.Users_ViewSet)
@@ -26,5 +26,5 @@ urlpatterns = patterns('',
     url(r'^Get_Scanned/', views.Get_Scanned.as_view()),
     url(r'^Add_Temp/', views.Add_Temp.as_view()),
     url(r'^Avg_Temp/', views.Avg_Temp.as_view()),
-
+    url(r'^Latest_RD/', views.Latest_RD.as_view()),
 )

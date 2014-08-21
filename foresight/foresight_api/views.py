@@ -25,6 +25,14 @@ class Get_Scanned(APIView):
         response = Response(result, status=status.HTTP_200_OK)        
         return response
 
+class Latest_RD(APIView):
+    def get(self, request, *args, **kw):
+        arg1 = request.GET.get('user_id',None)
+        #data = Room_Data.objects.order_by('-timestamp')[:1]
+        result = serializers.serialize("json", Room_Data.objects.filter(user_id__exact=arg1).order_by('-timestamp')[:1])
+        response = Response(result, status=status.HTTP_200_OK)
+        return response
+
 class Add_Temp(APIView):
 
     def get(self, request, *args, **kw):
