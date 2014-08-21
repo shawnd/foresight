@@ -26,20 +26,20 @@
   <script src="jquery-1.9.1.min.js"></script>
   <script src="jquery.mobile-1.3.1.min.js"></script>
   <link rel="stylesheet" type="text/css" href="css/index.css" />
-  <title>Hello World</title>
+  <title>Foresight - Scanner</title>
 </head>
 <body>
 
   <!-- Home Page -->
   <div data-role="page" id="home">
     <div data-role="header" data-position="fixed">
-	  <h1>U Grok It Cordova test</h1>
+	  <h1>Foresight Scanner</h1>
 	</div>
     <div data-role="content">
-	  <div style="width:100%">
+	  <div id="informationHolder" style="width:100%">
+      <p id="scanningHeader" style="display:none">Now Scanning</p>
 	    <!-- <a href="javascript:location.reload()" data-role="button" data-inline="true">R</a> -->
-	    <a id="infoButton" data-role="button" data-inline="true">Info</a>
-	    <span id="infoText">Not Connected</span>
+	    <p id="infoText">Not Connected</p>
       <a id="batteryButton" data-role="button" data-inline="true" style="display:none">Battery</a>
       <a id="configureButton" data-role="button" data-inline="true" style="display:none">Conf</a>
 	  </div>

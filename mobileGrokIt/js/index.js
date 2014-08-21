@@ -4,6 +4,40 @@
 
 var TEST_TO_RUN_ON_BATTERY = "readTag";
 
+function ajaxRFID(inputRFID) {
+  $.ajax({                                      
+      url: "http://184.65.136.142:8080/foresight_api/Users/?format=json&RFID=" + inputRFID, 
+      type: "GET",
+      data: "",
+      dataType: 'json',
+      async: true,
+      success: function(data)
+      {
+        if(data.length > 0) {
+          //alert("MATCH FOUND" + inputRFID);
+          recentlyScannedPost(inputRFID);
+        }
+      }
+    });
+}
+
+function recentlyScannedPost(inputRFID) {
+  $.ajax({                                      
+    url: "http://184.65.136.142:8080/foresight_api/Recently_Scanned/", 
+    type: "POST",
+    data: "employeeID=frontDesk&RFID="+inputRFID,
+    dataType: 'json',
+    async: true,
+    success: function(data)
+    {
+      alert("TEST WORKED");
+    }
+  });
+}
+
+var scannedRFIDs = [];
+var scannedRFIDtimes = [];
+
 var app = {
 
 started: false,
@@ -17,15 +51,6 @@ inventoryType: 0,
 //
 initialize: function() {
   document.addEventListener("deviceready", this.onDeviceReady, false);
-
-  $("#infoButton").bind("click", function() {
-    alert("U Grok It plugin: " + ugi.pluginVersion + "\n" +
-          "Native SDK: " + ugi.nativeSdkVersion + "\n" +
-          "Grokker: " + ugi.readerHardwareModel + ": " + ugi.readerSerialNumber + "\n" +
-          "isConnected: " + ugi.isConnected + "\n" +
-          "isInOpenConnection: " + ugi.isInOpenConnection + "\n" +
-          "isAnythingPluggedIntoAudioJack: " + ugi.isAnythingPluggedIntoAudioJack);
-  });
 
   $("#batteryButton").bind("click", function() {
     if (ugi.activeInventory) {
@@ -85,14 +110,12 @@ ugiInventoryTagFound: function(tag, detailedPerReadData) {
   if (detailedPerReadData) {
     ugi.log("ugiInventoryTagFound: " + tag + ", " + (detailedPerReadData ? ", details: " + detailedPerReadData : ""));
   }
-
-  //Add information to database
-  $.ajax({
-    url: url_base + "http://184.65.136.142:8080/foresight_api/Users/?format=json" + "&RFID" + tag.epc,
-    type: "POST",
-    data "",
-    dataType: 'json'
-  });
+  if($.inArray(tag.epc, scannedRFIDs) == -1) {
+    ajaxRFID(tag.epc);
+    scannedRFIDs = scannedRFIDs + tag.epc;
+    scannedRFIDtimes = scannedRFIDtimes + Date.now();
+  }
+  //alert("RFID = " + tag.epc);
 },
 
 ////////////////////
@@ -134,10 +157,13 @@ onDeviceReady: function() {
       $("#infoText").hide();
       $("#batteryButton").show();
       $("#configureButton").show();
+      $("#scanningHeader").show();
+
     } else {
       $("#infoText").show();
       $("#batteryButton").hide();
       $("#configureButton").hide();
+      $("#scanningHeader").hide();
     }
     /*
     ugi.log("state = " + ugi.connectionState);
