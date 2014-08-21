@@ -91,4 +91,3 @@ STATIC_URL = '/static/'
 
 # Allow CORS requests from all origins to API endpoints
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_URLS_REGEX = r'^/api/.*$'
