@@ -1,4 +1,4 @@
-from foresight_api.models import Users,Contact_Info,Room_Data,Customer_History,Recently_Scanned
+from foresight_api.models import Users,Contact_Info,Room_Data,Customer_History,Recently_Scanned, User_Avg
 from rest_framework import serializers
 
 class Users_Serializer(serializers.HyperlinkedModelSerializer):
@@ -25,3 +25,7 @@ class Recently_Scanned_Serializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Recently_Scanned
 		fields = ('employeeID','RFID','timestamp')
+class User_Avg_Serializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = User_Avg
+		fields = ('RFID','temp')

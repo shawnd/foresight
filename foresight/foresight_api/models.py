@@ -2,10 +2,12 @@ from django.db import models
 
 
 class Users(models.Model):
-	RFID=models.CharField(max_length=50)
+	RFID=models.IntegerField()
 	password=models.CharField(max_length=50)
 	firstName=models.CharField(max_length=50)
 	lastName=models.CharField(max_length=50)
+	def __unicode__(self):
+		return u"%s %s" % (self.RFID)
 
 class Contact_Info(models.Model):
 	user_id=models.CharField(max_length=50)
@@ -17,7 +19,6 @@ class Contact_Info(models.Model):
 
 class Room_Data(models.Model):
     user_id=models.CharField(max_length=50)
-    temp=models.CharField(max_length=50)
     humidityPercentage=models.CharField(max_length=50)
     humidityTemp=models.CharField(max_length=50)
     batteryVoltage=models.CharField(max_length=50)
@@ -38,3 +39,7 @@ class Recently_Scanned(models.Model):
 	employeeID=models.CharField(max_length=50)
 	RFID=models.CharField(max_length=50)
 	timestamp=models.DateTimeField(auto_now=True)
+
+class User_Avg(models.Model):
+	RFID=models.IntegerField()
+	temp=models.IntegerField()

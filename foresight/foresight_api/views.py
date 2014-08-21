@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from foresight_api.models import Users,Contact_Info,Room_Data,Customer_History,Recently_Scanned
+from foresight_api.models import Users,Contact_Info,Room_Data,Customer_History,Recently_Scanned,User_Avg
 from rest_framework import viewsets
-from foresight_api.serializers import Users_Serializer,Contact_Info_Serializer,Room_Data_Serializer,Customer_History_Serializer,Recently_Scanned_Serializer
+from foresight_api.serializers import Users_Serializer,Contact_Info_Serializer,Room_Data_Serializer,Customer_History_Serializer,Recently_Scanned_Serializer,User_Avg_Serializer
 from rest_framework import viewsets, filters, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,6 +13,8 @@ from django.http import HttpResponse
 import datetime
 from django.utils import timezone
 from itertools import chain
+from django.db.models import Avg
+from django.db.models import Sum
 
 class Get_Scanned(APIView):
 
@@ -23,6 +25,24 @@ class Get_Scanned(APIView):
         response = Response(result, status=status.HTTP_200_OK)        
         return response
 
+class Add_Temp(APIView):
+
+    def get(self, request, *args, **kw):
+        arg1 = request.GET.get('RFID',None)
+        arg2 = request.GET.get('temp',None)
+        data = User_Avg(RFID= arg1, temp= arg2)
+        data.save()      
+        response = Response("DB populated"+arg1+arg2, status=status.HTTP_200_OK)       
+        return response
+
+class Avg_Temp(APIView):
+
+    def get(self, request, *args, **kw):
+        arg1 = request.GET.get('RFID',None)
+        
+        #result = serializers.serialize("json", data)
+        response = Response(User_Avg.objects.filter(RFID__exact=arg1).aggregate(Avg('temp')), status=status.HTTP_200_OK)       
+        return response
 
 class Users_ViewSet(viewsets.ModelViewSet):
     queryset = Users.objects.all()
@@ -51,5 +71,10 @@ class Customer_History_ViewSet(viewsets.ModelViewSet):
 class Recently_Scanned_ViewSet(viewsets.ModelViewSet):
 	queryset = Recently_Scanned.objects.all()
 	serializer_class = Recently_Scanned_Serializer
+	filter_backends = (filters.DjangoFilterBackend,)
+
+class User_Avg_ViewSet(viewsets.ModelViewSet):
+	queryset = User_Avg.objects.all()
+	serializer_class = User_Avg_Serializer
 	filter_backends = (filters.DjangoFilterBackend,)
 	
