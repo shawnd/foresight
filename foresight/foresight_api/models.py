@@ -23,4 +23,12 @@ class Room_Data(models.Model):
     batteryVoltage=models.CharField(max_length=50)
     airflow=models.CharField(max_length=50)
     timestamp=models.CharField(max_length=50)
+    roomNum=models.CharField(max_length=50)
+    hotel=models.CharField(max_length=50)
 
+class Customer_History(models.Model):
+	hotel=models.CharField(max_length=50)
+	roomNum=models.CharField(max_length=50)
+	daysStayed=models.CharField(max_length=50)
+	timestamp=models.CharField(max_length=50)
+	counter=models.IntegerField()
