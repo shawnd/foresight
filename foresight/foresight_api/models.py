@@ -19,6 +19,7 @@ class Contact_Info(models.Model):
 
 class Room_Data(models.Model):
     user_id=models.CharField(max_length=50)
+    temp=models.CharField(max_length=50)
     humidityPercentage=models.CharField(max_length=50)
     humidityTemp=models.CharField(max_length=50)
     batteryVoltage=models.CharField(max_length=50)
