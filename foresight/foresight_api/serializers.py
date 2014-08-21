@@ -9,9 +9,9 @@ class Users_Serializer(serializers.HyperlinkedModelSerializer):
 class Contact_Info_Serializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Contact_Info
-		fields = ('address','country','postalCode','email','phoneNumber')
+		fields = ('address','country','postalCode','email','phoneNumber','user_id')
 
 class Room_Data_Serializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Room_Data
-		fields = ('temp','humidityPercentage','humidityTemp','batteryVoltage','airflow','timestamp')
+		fields = ('temp','humidityPercentage','humidityTemp','batteryVoltage','airflow','timestamp','user_id')

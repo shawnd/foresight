@@ -14,10 +14,10 @@ class Contact_Info_ViewSet(viewsets.ModelViewSet):
 	queryset = Contact_Info.objects.all()
 	serializer_class = Contact_Info_Serializer
 	filter_backends = (filters.DjangoFilterBackend,)
-	filter_fields = ('user_id')
+	filter_fields = ['user_id']
 
 class Room_Data_ViewSet(viewsets.ModelViewSet):
 	queryset = Room_Data.objects.all()
 	serializer_class = Room_Data_Serializer
 	filter_backends = (filters.DjangoFilterBackend,)
-	filter_fields = ('user_id')
+	filter_fields = ['user_id']

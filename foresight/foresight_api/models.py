@@ -23,3 +23,4 @@ class Room_Data(models.Model):
     batteryVoltage=models.CharField(max_length=50)
     airflow=models.CharField(max_length=50)
     timestamp=models.CharField(max_length=50)
+
