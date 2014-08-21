@@ -42,5 +42,5 @@ class Recently_Scanned(models.Model):
 	timestamp=models.DateTimeField(auto_now=True)
 
 class User_Avg(models.Model):
-	RFID=models.IntegerField()
+	RFID=models.CharField(max_length=50)
 	temp=models.IntegerField()
