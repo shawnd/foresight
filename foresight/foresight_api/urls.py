@@ -2,13 +2,14 @@ from django.conf.urls import patterns, url, include
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 from foresight_api import views
-from views import Users_ViewSet,Contact_Info_ViewSet,Room_Data_ViewSet,Customer_History_ViewSet
+from views import Users_ViewSet,Contact_Info_ViewSet,Room_Data_ViewSet,Customer_History_ViewSet,Recently_Scanned_ViewSet,Get_Scanned
 
 router = routers.DefaultRouter()
 router.register(r'Users', views.Users_ViewSet)
 router.register(r'Contact_Info', views.Contact_Info_ViewSet)
 router.register(r'Room_Data', views.Room_Data_ViewSet)
 router.register(r'Customer_History', views.Customer_History_ViewSet)
+router.register(r'Recently_Scanned', views.Recently_Scanned_ViewSet)
 
 filter_fields = ('code')
 
@@ -19,4 +20,7 @@ urlpatterns = patterns('',
     url(r'^Contact_Info/(?P<pk>[0-9]+)/$', views.Contact_Info_ViewSet.as_view()),
     url(r'^Room_Data/(?P<pk>[0-9]+)/$', views.Room_Data_ViewSet.as_view()),
     url(r'^Customer_History/(?P<pk>[0-9]+)/$', views.Room_Data_ViewSet.as_view()),
+    url(r'^Recently_Scanned/(?P<pk>[0-9]+)/$', views.Recently_Scanned_ViewSet.as_view()),
+    url(r'^Get_Scanned/', views.Get_Scanned.as_view()),
+
 )

@@ -32,3 +32,8 @@ class Customer_History(models.Model):
 	daysStayed=models.CharField(max_length=50)
 	timestamp=models.CharField(max_length=50)
 	counter=models.IntegerField()
+
+class Recently_Scanned(models.Model):
+	employeeID=models.CharField(max_length=50)
+	RFID=models.CharField(max_length=50)
+	timestamp=models.DateTimeField(auto_now=True)
