@@ -4,6 +4,22 @@
 
 var TEST_TO_RUN_ON_BATTERY = "readTag";
 
+function postNewUser(inputRFID) {
+  var fname = fnames[parseInt(Date.now()) % fnames.length];
+  var lname = lnames[parseInt(Date.now()) % lnames.length];
+  $.ajax({                                      
+      url: "http://184.65.136.142:8080/foresight_api/Users/", 
+      type: "POST",
+      data: "RFID="+inputRFID+"&password=code&firstName="+fname+"&lastName="+lname,
+      dataType: 'json',
+      async: true,
+      success: function(data)
+      {
+      }
+    });
+  return (fname + " " + lname);
+}
+
 function ajaxRFID(inputRFID) {
   $.ajax({                                      
       url: "http://184.65.136.142:8080/foresight_api/Users/?format=json&RFID=" + inputRFID, 
@@ -14,8 +30,11 @@ function ajaxRFID(inputRFID) {
       success: function(data)
       {
         if(data.length > 0) {
-          //alert("MATCH FOUND" + inputRFID);
+          //POST TO RECENTLY_SCANNED MODEL
           recentlyScannedPost(inputRFID);
+          $('ul').append('<li><a href="#">' + data[0].firstName + ' ' + data[0].lastName + '<br>' + inputRFID +'</a></li>').listview('refresh');
+        } else {
+          $('ul').append('<li><a href="#">' + postNewUser(inputRFID) + '<br>' + inputRFID + '</a></li>').listview('refresh');
         }
       }
     });
@@ -30,13 +49,23 @@ function recentlyScannedPost(inputRFID) {
     async: true,
     success: function(data)
     {
-      alert("TEST WORKED");
     }
   });
 }
 
+function toggleConnected() {
+  if(app.started) {
+    $("#scanningHeader").text("Now Scanning");
+  } else {
+    $("#scanningHeader").text("Connected");
+  }
+}
+
 var scannedRFIDs = [];
 var scannedRFIDtimes = [];
+
+var fnames = ['James', 'Liam', 'Terry', 'Mason', 'Drew', 'Antonio', 'Eric', 'Tony', 'Paul', 'Sam', 'Vince'];
+var lnames = ['Tyson', 'Lucas', 'Gage', 'Grayson', 'Parker', 'Hunt', 'Baylor', 'Carry', 'Terrace'];
 
 var app = {
 
@@ -78,6 +107,7 @@ initialize: function() {
   
   $("#startStopButton").bind("click", function() {
 		app.started = !app.started;
+    toggleConnected();
     if (app.started) {
 			$('ul').empty();
       var config = UgiRfidConfiguration.configWithInventoryType(app.inventoryType);
@@ -89,6 +119,8 @@ initialize: function() {
       //config.selectBank = ugi.MemoryBanks.EPC;
       //config.reportRssi = true;
       //config.detailedPerReadData = true;
+      config.inventoryVolume = 0;
+      config.soundType = 0;
       ugi.startInventory(app, config);
   		$("#startStopButton .ui-btn-text").text("Stop");
 		} else {
@@ -106,11 +138,11 @@ ugiInventoryDidStop: function(result) {
 },
 ugiInventoryTagFound: function(tag, detailedPerReadData) {
   app.theTag = tag;
-  $('ul').append('<li><a href="#">' + tag.epc + '</a></li>').listview('refresh');
   if (detailedPerReadData) {
     ugi.log("ugiInventoryTagFound: " + tag + ", " + (detailedPerReadData ? ", details: " + detailedPerReadData : ""));
   }
-  if($.inArray(tag.epc, scannedRFIDs) == -1) {
+  var RFICindex = $.inArray(tag.epc, scannedRFIDs);
+  if(RFICindex == -1) {
     ajaxRFID(tag.epc);
     scannedRFIDs = scannedRFIDs + tag.epc;
     scannedRFIDtimes = scannedRFIDtimes + Date.now();
@@ -123,9 +155,6 @@ ugiInventoryTagFound: function(tag, detailedPerReadData) {
 /*
 ugiInventoryDidStart: function() {
   ugi.log("ugiInventoryDidStart");
-},
-ugiInventoryTagChanged: function(tag, firstFind) {
-  ugi.log("ugiInventoryTagChanged: " + tag + ", firstFind = " + firstFind);
 },
 ugiInventoryTagSubsequentFinds: function(tag, count, detailedPerReadData) {
   ugi.log("ugiInventoryTagSubsequentFinds: " + tag + ", count = " + count + (detailedPerReadData ? ", details: " + detailedPerReadData : ""));
@@ -153,33 +182,18 @@ onDeviceReady: function() {
     } else { // connected
       isConnected = true;
     }
+    toggleConnected();
     if (isConnected) {
       $("#infoText").hide();
       $("#batteryButton").show();
       $("#configureButton").show();
       $("#scanningHeader").show();
-
     } else {
       $("#infoText").show();
       $("#batteryButton").hide();
       $("#configureButton").hide();
       $("#scanningHeader").hide();
     }
-    /*
-    ugi.log("state = " + ugi.connectionState);
-    ugi.log("isAnythingPluggedIntoAudioJack = " + ugi.isAnythingPluggedIntoAudioJack);
-    ugi.log("requiredProtocolVersion = " + ugi.requiredProtocolVersion);
-    ugi.log("supportedProtocolVersion = " + ugi.supportedProtocolVersion);
-    ugi.log("readerProtocolVersion = " + ugi.readerProtocolVersion);
-    ugi.log("readerHardwareModel = " + ugi.readerHardwareModel);
-    ugi.log("firmwareVersion = " + ugi.firmwareVersion);
-    ugi.log("region = " + ugi.region);
-    ugi.log("antennaType = " + ugi.antennaType);
-    ugi.log("numVolumeLevels = " + ugi.numVolumeLevels);
-    ugi.log("batteryCapacity = " + ugi.batteryCapacity);
-    ugi.log("batteryCapacity_mAh = " + ugi.batteryCapacity_mAh);
-    ugi.log("readerDescription = " + ugi.readerDescription);
-    */
   });
 },
 
